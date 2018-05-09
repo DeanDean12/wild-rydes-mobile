@@ -46,19 +46,38 @@ class SignIn extends React.Component {
     this.setState({ code: e.target.value });
   }
 
-  onSubmitForm(e) {
+
+  async onSubmitForm(e) {
     e.preventDefault();
-    console.log('Form Submitted');
-    this.setState({ stage: 1 });
+    try {
+        const userObject = await Auth.signIn(
+            this.state.email.replace(/[@.]/g, '|'),
+            this.state.password
+        );
+        console.log('userObject = ', userObject);
+        this.setState({ userObject, stage: 1 });
+    } catch (err) {
+        alert(err.message);
+        console.error('Auth.signIn(): ', err);
+    }
   }
 
-  onSubmitVerification(e) {
+  async onSubmitVerification(e) {
     e.preventDefault();
-    console.log('Verification Submitted');
-    this.setState({ stage: 0, email: '', password: '', code: '' });
-    // Go back home
-    this.props.history.replace('/');
+    try {
+        const data = await Auth.confirmSignIn(
+            this.state.userObject,
+            this.state.code
+        );
+        console.log('data = ', data);
+        this.setState({ stage: 0, email: '', password: '', code: '' });
+        this.props.history.replace('/app');
+    } catch (err) {
+        alert(err.message);
+        console.error('Auth.confirmSignIn(): ', err);
+    }
   }
+
 
   isValidEmail(email) {
     var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

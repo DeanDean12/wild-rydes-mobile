@@ -1,14 +1,78 @@
 --- !com.amazonaws.mobilehub.v0.Project 
 features:
+  cloudlogic: !com.amazonaws.mobilehub.v0.CloudLogic 
+    components:
+      requestUnicorn: !com.amazonaws.mobilehub.v0.API 
+        attributes:
+          name: requestUnicorn
+          requires-signin: true
+          sdk-generation-stage-name: Development
+        paths:
+          /ride: !com.amazonaws.mobilehub.v0.Function 
+            codeFilename: uploads/requestUnicorn-20180508160731.zip
+            description: 'Handler for calls to resource path : /ride/{proxy+}'
+            enableCORS: true
+            environment: {}
+            handler: lambda.handler
+            hashcode: zFN8lz6Gcv4lolpVgKThNBBNl6JzmkTz+3afbdBllMk=
+            memorySize: '128'
+            modified: '2018-05-08T23:08:03.111+0000'
+            name: requestUnicorn
+            runtime: nodejs6.10
+            timeout: '3'
+            version: fhG3a6NOmCzOaT9MhID3ri1TM11cBF1C
+          '/ride/{proxy+}': !com.amazonaws.mobilehub.v0.Function 
+            codeFilename: uploads/requestUnicorn-20180508160731.zip
+            description: 'Handler for calls to resource path : /ride/{proxy+}'
+            enableCORS: true
+            environment: {}
+            handler: lambda.handler
+            hashcode: zFN8lz6Gcv4lolpVgKThNBBNl6JzmkTz+3afbdBllMk=
+            memorySize: '128'
+            modified: '2018-05-08T23:08:03.111+0000'
+            name: requestUnicorn
+            runtime: nodejs6.10
+            timeout: '3'
+            version: SWRbptjVa96STvUkD39ytvHvijceBoZQ
   content-delivery: !com.amazonaws.mobilehub.v0.ContentDelivery 
     attributes:
       enabled: true
       visibility: public-global
     components:
       release: !com.amazonaws.mobilehub.v0.Bucket {}
+  database: !com.amazonaws.mobilehub.v0.Database 
+    components:
+      database-nosql: !com.amazonaws.mobilehub.v0.NoSQLDatabase 
+        tables:
+          - !com.amazonaws.mobilehub.v0.NoSQLTable 
+            attributes:
+              RideId: S
+            hashKeyName: RideId
+            hashKeyType: S
+            rangeKeyName: ''
+            rangeKeyType: ''
+            tableName: ___DYNAMIC_PREFIX___-Rides
+            tablePrivacy: public
   mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint 
     components:
       analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}
-  sign-in: !com.amazonaws.mobilehub.v0.SignIn {}
-name: WildRydesTest1
-region: us-east-1
+  sign-in: !com.amazonaws.mobilehub.v0.SignIn 
+    attributes:
+      enabled: true
+      optional-sign-in: true
+    components:
+      sign-in-user-pools: !com.amazonaws.mobilehub.v0.UserPoolsIdentityProvider 
+        attributes:
+          alias-attributes:
+            - email
+            - phone_number
+          mfa-configuration: ON
+          name: userpool
+          password-policy: !com.amazonaws.mobilehub.ConvertibleMap 
+            min-length: '8'
+            require-lower-case: true
+            require-numbers: true
+            require-symbols: true
+            require-upper-case: true
+name: wild-rydes-mobile-2018-05-08-13-32-39
+region: us-west-1
